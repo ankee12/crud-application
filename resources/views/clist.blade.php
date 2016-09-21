@@ -26,6 +26,8 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
+
 </head>
 
 <body>
@@ -50,7 +52,10 @@
                         <a href="{{route('create')}}">Customer List</a>
                     </li>
                     <li>
-                        <a href="{{route('form')}}"> <i class="fa fa-plus"> </i> Form</a>
+                        <a href="{{route('form')}}"> <i class="fa fa-plus"> </i> Registration</a>
+                    </li>
+                    <li>
+                        <a href="{{route('login')}}" style="float:right;"> Log In </a>
                     </li>
                     
                 </ul>
@@ -61,6 +66,13 @@
     </nav>
 
     <!-- Page Content -->
+
+@if(Session::has('message')) 
+<div class="alert alert-info"> 
+    {{Session::get('message')}} 
+</div> 
+@endif
+
 
     <div class="container">
 
@@ -81,6 +93,7 @@
                     <th> Email </th>
                     <th> Food </th>
                     <th> Photo </th>
+                    <th> Action </th>
                   </tr>
                  
                 
@@ -96,6 +109,10 @@
                     <td> {{$customerss->email}} </td>
                     <td> {{$customerss->favourite}} </td>
                     <td> <img src="{{URL::to('/image',$customerss->image)}}" width="50px" height="40px"> </td>
+                    <td>  
+                      <a href="{{route('edit', $customerss->id)}}"> <i class="fa fa-pencil" aria-hidden="true"></i> </a>  &nbsp; &nbsp;
+                      <a href="{{route('destroy', $customerss->id)}}" class="delete" id="delete"> <i class="fa fa-trash" aria-hidden="true"></i> </a> 
+                    </td>
                   </tr>
                    @endforeach
                 <tbody>
@@ -129,6 +146,8 @@
 
     <!-- jQuery -->
     
+    
+
     <script src="{{ URL::asset('assets/js/jquery.js') }}"></script>
 
     <!-- Bootstrap Core JavaScript -->

@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/css/shop-homepage.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/fontawesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/fontawesome/css/font-awesome.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/sweetalert/dist/sweetalert.css') }}">
+    {!!Html::style('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css')!!}
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -50,9 +53,11 @@
                         <a href="{{route('create')}}">Customer List</a>
                     </li>
                     <li>
-                        <a href="{{route('form')}}"> <i class="fa fa-plus"> </i> Form</a>
+                        <a href="{{route('form')}}"> <i class="fa fa-plus"> </i> Registration</a>
                     </li>
-                    
+                    <li>
+                        <a href="{{route('login')}}" style="float:right;"> Log In </a>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -76,65 +81,110 @@
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12">
               <h2> Add Customer </h2> <hr>
-              <form method="post" enctype="multipart/form-data" action="store">
+              <form method="post" enctype="multipart/form-data" action="{{!empty($customers->id) ? route('update', $customers->id) : route('store')}}">
                   <div class="form-group">
                     <label for="name"> Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{Request::old('name')}}">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{!empty($customers->id) ? $customers->name : Request::old('name')}}">
                   </div>
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <div class="form-group">
                     <label for="dob"> Date of Birth</label>
-                    <input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth" value="{{Request::old('dob')}}">
+                    <input type="text" class="form-control" id="datepicker" name="dob" placeholder="Date of Birth" value="{{!empty($customers->id) ? $customers->dob : Request::old('dob')}}">
                   </div>
-
+                  <?php if(!empty($customers->id))
+                  { ?> 
                   <div class="form-group">
                     <label for="gender"> Gender </label> <br />
-                    <input type="radio" name="gender" id="gender" value="Male" checked> Male
-                    <input type="radio" name="gender" id="gender" value="Female"> Female
+          
+                    <input type="radio" name="gender" id="gender" value="Male" <?php if(@$customers->gender=="Male") { echo 'checked="checked"'; } ?>>  Male  
+                    <input type="radio" name="gender" id="gender" value="Female" <?php if(@$customers->gender=="Female") { echo 'checked="checked"'; } ?>> Female
+
                   </div>
+                  <?php 
+                } else { ?>
+                <div class="form-group">
+                    <label for="gender"> Gender </label> <br />
+                    <input type="radio" name="gender" id="gender" value="Male" <?php if(Request::old('gender')== "Male") { echo 'checked="checked"'; } ?> >  Male  
+                    <input type="radio" name="gender" id="gender" value="Female" <?php if(Request::old('gender')== "Female") { echo 'checked="checked"'; } ?>> Female
+                  </div>
+                  <?php }?>
 
                   <div class="form-group">
                     <label for="country"> Country </label> <br />
-                    <select class="form-control" name="country" id="country" value="{{Request::old('country')}}">
-                    <option>India</option>
-                    <option>USA</option>
-                    <option>Australia</option>
-                    <option>Canada</option>
-                    <option>UK</option>
+                    <select class="form-control" name="country" id="country" placeholder="Country">
+                    <option> {{!empty($customers->id) ? $customers->country : Request::old('country')}} </option>
+                    <option> India </option>
+                    <option> USA </option>
+                    <option> Australia </option>
+                    <option> Canada </option>
+                    <option> UK </option>
                     </select>
                   </div>
 
                   <div class="form-group">
                     <label for="address"> Mailing Address </label> <br />
-                    <textarea class="form-control" rows="3" name="address" id="address" placeholder="Address"> {{Request::old('address')}}</textarea>
+                    <textarea class="form-control" rows="3" name="address" id="address" placeholder="Address"> {{!empty($customers->id) ? $customers->address : Request::old('address')}}</textarea>
                   </div>
 
                   <div class="form-group">
                     <label for="email"> Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{Request::old('email')}}">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{!empty($customers->id) ? $customers->email : Request::old('email')}}">
+                  </div>
+                   
+                   <?php if(!empty($customers->id))
+                  { ?> 
+
+                  <?php } else 
+                  { ?>
+                  <div class="form-group">
+                    <label for="password"> Password </label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                   </div>
 
                   <div class="form-group">
-                    <label for="address"> Favourite Food </label> <br />
-                    <label class="checkbox-inline">
-                      <input type="checkbox" id="favourite" name="favourite[]" value="North"> North
-                    </label>
-                    <label class="checkbox-inline">
-                      <input type="checkbox"  id="favourite" name="favourite[]" value="East"> East
-                    </label>
-                    <label class="checkbox-inline">
-                      <input type="checkbox"  id="favourite" name="favourite[]" value="West"> West
-                    </label>
-                    <label class="checkbox-inline">
-                      <input type="checkbox"  id="favourite" name="favourite[]" value="South"> South
-                    </label>
+                    <label for="password_confirmation "> Confirm Password </label>
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
                   </div>
+                  <?php } ?>
 
+                  <?php if(!empty($customers->id))
+                  { ?> 
                   <div class="form-group">
-                    <label for="exampleInputFile"> Profile Photo </label>
-                    <input type="file" id="exampleInputFile" name="image" id="image">
+                    <label for="favourite"> Favourite Food </label> <br />
+                    <?php $result = explode(',' , @$customers->favourite); ?>
+                    <input type="checkbox" id="favourite" name="favourite[]" value="North" <?php if(is_array($result) AND in_array('North', $result))  { echo 'checked="checked"'; } ?>> North
+                    <input type="checkbox"  id="favourite" name="favourite[]" value="East" <?php if(is_array($result) AND in_array('East', $result))  { echo 'checked="checked"'; } ?>> East
+                    <input type="checkbox"  id="favourite" name="favourite[]" value="West" <?php if(is_array($result) AND in_array('West', $result))  { echo 'checked="checked"'; } ?>> West
+                    <input type="checkbox"  id="favourite" name="favourite[]" value="South" <?php if(is_array($result) AND in_array('South', $result))  { echo 'checked="checked"'; } ?>> South
+                                   
                   </div>
+                  <?php }
+                  else { ?>
+                   <div class="form-group">
 
+                    <label for="favourite"> Favourite Food </label> <br />
+                    <input type="checkbox" id="favourite" name="favourite[]" value="North" <?php if(is_array(Request::old('favourite')) AND in_array('North', Request::old('favourite'))) { echo 'checked="checked"'; } ?>> North
+                    <input type="checkbox"  id="favourite1" name="favourite[]" value="East" <?php if(is_array(Request::old('favourite')) AND in_array('East', Request::old('favourite'))) { echo 'checked="checked"'; } ?>> East
+                    <input type="checkbox"  id="favourite2" name="favourite[]" value="West" <?php if(is_array(Request::old('favourite')) AND in_array('West', Request::old('favourite'))) { echo 'checked="checked"'; } ?>> West
+                    <input type="checkbox"  id="favourite3" name="favourite[]" value="South" <?php if(is_array(Request::old('favourite')) AND in_array('South', Request::old('favourite'))) { echo 'checked="checked"'; } ?>> South
+                  </div>
+                  <?php } ?>
+
+                  <?php if(!empty($customers->id))
+                  { ?> 
+                  <div class="form-group">
+                    <label for="image"> Profile Photo </label>
+                    <input type="file"  name="image" id="image">
+                    <br />
+                    <img src="{{URL::to('/image/',@$customers->image)}}" width="100px" height="100px">
+                    </div>
+                  <?php } 
+                  else { ?> 
+                  <div class="form-group">
+                    <label for="image"> Profile Photo </label> <br />
+                    <input type="file" name="image" id="image">
+                  </div>
+                  <?php }?> 
                   <div class="checkbox">
                     <label>
                     <input type="checkbox"> Check me out
@@ -179,7 +229,14 @@
     <!-- Bootstrap Core JavaScript -->
     
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
-
+    <script src="{{ URL::asset('assets/sweetalert/dist/sweetalert.min.js') }}"></script>
+    {!!Html::script('//code.jquery.com/jquery-1.10.2.js')!!}
+    {!!Html::script('//code.jquery.com/ui/1.11.2/jquery-ui.js')!!}
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
 </body>
 
 </html>
