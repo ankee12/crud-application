@@ -28,6 +28,5 @@
     Route::post('/login/loginme', ['uses' => 'HomeController@getLogin', 'as'=>'loginme']);
     Route::get('/login/logout', ['uses' => 'HomeController@getLogout', 'as'=>'logout']);
     Route::get('/blog', ['uses' => 'HomeController@blog', 'as'=>'blog'])->middleware('auth');
-    
     Route::post('/login/loginme/comment', ['uses' => 'BlogCtrl@store', 'as'=>'comment']);
-    
+    Route::get('/blog', ['uses' => 'HomeController@create', 'as' => 'hct']);

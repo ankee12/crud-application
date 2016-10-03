@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Collection;
 
 
 
@@ -63,7 +64,7 @@ class CustomerCtrl extends Controller
     {
         //echo "<pre>"; print_r($request->all()); exit;
          //Validation
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:20',
             'dob' => 'required|date',
             'gender' => 'required',
@@ -181,10 +182,9 @@ class CustomerCtrl extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($ids)
     {
-        $customer = User::find($id);
-        $customer->delete();
+        $customer = User::destroy($ids);
         return redirect(route('create'));
     }
 

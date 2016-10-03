@@ -25,8 +25,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-
+   
+   
+  
 
 </head>
 
@@ -80,11 +81,15 @@
 
             <div class="col-sm-12 col-lg-12 col-md-12">
               <h2> List of Customer </h2>  
+              
+              <a href="">Delete all checked</a>
+            
               <div class="table-responsive">
 
                 <table class="table">
                   
                   <tr>
+                    <th> <input type="checkbox" id="checkAll">  </th>
                     <th> Name </th>
                     <th> Date of Birth </th>
                     <th> Gender </th>
@@ -101,6 +106,7 @@
                 <tbody>
                    @foreach($customers as $customerss) 
                   <tr>
+                    <td> <input type="checkbox" name="checkbox[]" data-id="checkbox" class="cb" value="{{$customerss->id}}" /></td>
                     <td> {{$customerss->name}} </td>
                     <td> {{$customerss->dob}} </td>
                     <td> {{$customerss->gender}} </td>
@@ -113,6 +119,7 @@
                       <a href="{{route('edit', $customerss->id)}}"> <i class="fa fa-pencil" aria-hidden="true"></i> </a>  &nbsp; &nbsp;
                       <a href="{{route('destroy', $customerss->id)}}" class="delete" id="delete"> <i class="fa fa-trash" aria-hidden="true"></i> </a> 
                     </td>
+                    
                   </tr>
                    @endforeach
                 <tbody>
@@ -147,13 +154,24 @@
     <!-- jQuery -->
     
     
-
+    <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/jquery.js') }}"></script>
+
+
 
     <!-- Bootstrap Core JavaScript -->
     
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
 
+    {!!Html::script('//code.jquery.com/jquery-1.10.2.js')!!}
+    {!!Html::script('//code.jquery.com/ui/1.11.2/jquery-ui.js')!!}
+
+<script type="text/javascript">
+  $("#checkAll").change(function () {
+    $("input:checkbox").prop('checked', $(this).prop("checked"));
+});
+</script>
+   
 </body>
 
 </html>

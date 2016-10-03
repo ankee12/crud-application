@@ -12,6 +12,9 @@ use App\models\blog;
 
 use Illuminate\Support\Facades\Auth;
 
+/**
+* BlogCtrl
+*/
 class BlogCtrl extends Controller
 {
     public function _construct() {
@@ -34,7 +37,9 @@ class BlogCtrl extends Controller
      */
     public function create()
     {
-        
+        $blog = blog::all();
+        echo $blog->comment; 
+        exit;
     }
 
     /**
@@ -47,6 +52,7 @@ class BlogCtrl extends Controller
     {
         $blogs = new blog;
         $blogs->user_id = Auth::user()->id;
+        $blogs->user_name = Auth::user()->name;
         $blogs->comment = $request->comment;
         $blogs->save();
         return redirect('blog')->with('message', 'Your Post Submitted');

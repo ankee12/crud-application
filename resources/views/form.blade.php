@@ -20,8 +20,107 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/fontawesome/css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/sweetalert/dist/sweetalert.css') }}">
     {!!Html::style('//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css')!!}
+     
 
+    <!-- Javascript Form Validations Starts -->
+    <script>
 
+      function validateForm() {
+
+    //name text field validate
+      var name = document.forms["form"]["name"].value;
+        if (name == null || name == "") {
+            document.getElementById('name').style.borderColor = "red";
+            return false;
+        }
+      
+      //dob calender validate
+      var dob = document.forms["form"]["dob"].value;
+        if (dob == null || dob == "") {
+            alert("DOB must be select");
+           return false;
+        }
+
+      //gender radio button validate
+      ErrorText= ""; 
+        if ((form.gender[0].checked == false ) && ( form.gender[1].checked == false ) ) { alert ( "Please choose your Gender: Male or Female" ); return false; }
+      
+      //favourite food checkboxes validate
+      var fields = $("input[name='favourite[]']").serializeArray(); 
+          if (fields.length === 0) 
+          { 
+              alert('Selected Favourite Food'); 
+              // cancel submit
+              return false;
+          } 
+
+      //input file image validate
+      var image = document.getElementById("image");
+          if(image.value == '')
+          {
+              alert('Please select image');
+              return false;
+          }
+
+      //country dropdown validate
+      var country = document.getElementById("country");
+        if (country.value == "") {
+            //If the "Please Select" option is selected display error.
+            alert("Please select a country");
+            return false;
+        }
+      
+      //address textarea validate
+      var a = document.form.address.value;
+        if(a=="")
+        {
+            alert("please Enter the address");
+            document.form.address.focus();
+            return false;
+            }
+            if((a.length < 5) || (a.length > 100))
+            {
+            alert(" Your address must be 5 to 100 characters");
+            document.form.address.select();
+            return false;
+        }
+      
+      //email validate
+      var email = document.forms["form"]["email"].value;
+             atpos = email.indexOf("@");
+             dotpos = email.lastIndexOf("."); 
+            if(atpos < 1 || ( dotpos - atpos < 2 )) {
+             alert("Please enter correct email ID")
+             document.form.email.focus() ;
+             return false;
+            }
+            if(email == unique){
+              alert("This email is already taken, you choose another");
+              return false;
+            }
+      
+      //password, repassword required & same validate
+      var password = document.forms["form"]["password"].value; 
+      var repassword = document.forms["form"]["password_confirmation"].value;   
+          if(password==''){
+            alert("Enter Password");
+            return false;
+          }
+          if(repassword==''){
+            alert("Enter Re-Password");
+            return false;
+          }
+          if(password==repassword){
+              return true;
+              }
+              else{
+              alert("password must be same!");
+              return false;
+              } 
+    }
+    </script>
+   <!-- Javascript Form Validations Ends -->
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -81,10 +180,11 @@
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12">
               <h2> Add Customer </h2> <hr>
-              <form method="post" enctype="multipart/form-data" action="{{!empty($customers->id) ? route('update', $customers->id) : route('store')}}">
+              <form name="form" id="form" onSubmit="return validateForm()" method="post" enctype="multipart/form-data" action="{{!empty($customers->id) ? route('update', $customers->id) : route('store')}}">
                   <div class="form-group">
                     <label for="name"> Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{!empty($customers->id) ? $customers->name : Request::old('name')}}">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{!empty($customers->id) ? $customers->name : Request::old('name')}}"> <br/>
+                     <span id="name"></span>
                   </div>
                   <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <div class="form-group">
@@ -232,11 +332,15 @@
     <script src="{{ URL::asset('assets/sweetalert/dist/sweetalert.min.js') }}"></script>
     {!!Html::script('//code.jquery.com/jquery-1.10.2.js')!!}
     {!!Html::script('//code.jquery.com/ui/1.11.2/jquery-ui.js')!!}
-  <script>
-  $(function() {
-    $( "#datepicker" ).datepicker();
-  });
-  </script>
+  
+    <script>
+      $(function() {
+      $( "#datepicker" ).datepicker();
+      });
+    </script>
+
+    
+
 </body>
 
 </html>
