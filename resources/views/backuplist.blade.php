@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/fontawesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/fontawesome/css/font-awesome.css') }}">
 
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -86,8 +85,8 @@
              
 
               <div class="table-responsive">
-                <table class="table" id="example" cellspacing="0" width="100%">
-                <thead>
+                <table class="table">
+
                   <tr>
                     <th> <input type="checkbox" id="checkAll"> </th>
                     <th> Name </th>
@@ -100,21 +99,7 @@
                     <th> Photo </th>
                     <th> Action </th>
                   </tr>
-                </thead>
-                <tfoot>
-                 <tr>
-                    <th> <input type="checkbox" id="checkAll"> </th>
-                    <th> Name </th>
-                    <th> Date of Birth </th>
-                    <th> Gender </th>
-                    <th> Country </th>
-                    <th> Address </th>
-                    <th> Email </th>
-                    <th> Food </th>
-                    <th> Photo </th>
-                    <th> Action </th>
-                  </tr>
-                </tfoot>
+
                 <tbody>
                    @foreach($customers as $customerss) 
                   <tr>
@@ -170,16 +155,15 @@
     <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/jquery.js') }}"></script>
 
-    {!!Html::style('//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css')!!}
-    
+
+
     <!-- Bootstrap Core JavaScript -->
     
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
 
     {!!Html::script('//code.jquery.com/jquery-1.10.2.js')!!}
     {!!Html::script('//code.jquery.com/ui/1.11.2/jquery-ui.js')!!}
-    {!!Html::script('//code.jquery.com/jquery-1.12.3.js')!!}
-    {!!Html::script('//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')!!}
+
     <script type="text/javascript">
       $("#checkAll").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
@@ -189,21 +173,17 @@
     <script type="text/javascript">
     $('#btn-del').click(function(){
         //var uid = [];
-        $(':checkbox:checked').each(function(){
+        $(':checkbox:checked').each(function(i){
             var id = $(this).val();
             //alert(uid);
             //return;
-            $.get("{{action('CustomerCtrl@destroy', 'id')}}", function(){
+            $.get("{{action('CustomerCtrl@destroy', 'id')}}", function(data){
                  alert("deleted");
             });
         });
     });
     </script>
-    <script>
-    $(document).ready(function() {
-    $('#example').DataTable();
-    } );
-    </script>
+   
 </body>
 
 </html>
