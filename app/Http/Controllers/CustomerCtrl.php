@@ -69,7 +69,7 @@ class CustomerCtrl extends Controller
             'dob' => 'required|date',
             'gender' => 'required',
             'address' => 'required',
-            'email' => 'required|email|unique:customers',
+            'email' => 'required|email|unique:users',
             'favourite' => 'required',
             'image' => 'required',
             'password' => 'required|min:4|max:8|confirmed',
@@ -136,6 +136,7 @@ class CustomerCtrl extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $customer = User::find($id);
@@ -170,7 +171,7 @@ class CustomerCtrl extends Controller
         //$users->email = $request->email;   
         //$users->save(); 
 
-        return redirect(route('create'))->with('message', 'Updated Profile!');;
+        return redirect(route('create'))->with('message', 'Profile Updated!');;
        
     }  
     
@@ -182,10 +183,17 @@ class CustomerCtrl extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($ids)
-    {
-        $customer = User::destroy($ids);
-        return redirect(route('create'));
-    }
+       public function destroy(Request $request)
+       {  
+             User::destroy($request->id); 
+             return Response()->json(['sms'=>'delete successfully']); 
+          
+       }
+
+   // public function destroy($ids)
+    //{
+      // $customer = User::destroy($ids);
+        //return redirect(route('create'));
+    //}
 
 }

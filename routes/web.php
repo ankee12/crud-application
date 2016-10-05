@@ -22,7 +22,7 @@
 	Route::get('/form/create', ['uses'=>'CustomerCtrl@create','as'=>'create']);
 	Route::get('/edit/{id}',['uses'=>'CustomerCtrl@edit','as'=>'edit']);
 	Route::post('/update/{id}',['uses'=>'CustomerCtrl@update','as'=>'update']);
-    Route::get('/destroy/{id}',['uses'=>'CustomerCtrl@destroy','as'=>'destroy']);
+    Route::get('/destroy',['uses'=>'CustomerCtrl@destroy','as'=>'destroy']);
     
    	Route::get('/login', ['uses' => 'HomeController@Login', 'as'=>'login']);
     Route::post('/login/loginme', ['uses' => 'HomeController@getLogin', 'as'=>'loginme']);

@@ -94,10 +94,6 @@
              document.form.email.focus() ;
              return false;
             }
-            if(email == unique){
-              alert("This email is already taken, you choose another");
-              return false;
-            }
       
       //password, repassword required & same validate
       var password = document.forms["form"]["password"].value; 
@@ -180,7 +176,7 @@
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12">
               <h2> Add Customer </h2> <hr>
-              <form name="form" id="form" onSubmit="return validateForm()" method="post" enctype="multipart/form-data" action="{{!empty($customers->id) ? route('update', $customers->id) : route('store')}}">
+              <form role="form" name="form" id="form" onSubmit="return validateForm()" method="post" enctype="multipart/form-data" action="{{!empty($customers->id) ? route('update', $customers->id) : route('store')}}">
                   <div class="form-group">
                     <label for="name"> Full Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{!empty($customers->id) ? $customers->name : Request::old('name')}}"> <br/>
@@ -291,7 +287,7 @@
                   </label>                
                   </div>
 
-                  <button type="submit" class="btn btn-default">Submit</button>
+                  <button type="submit" class="btn btn-default" id="submit">Submit</button>
 
              </form>
 
@@ -339,7 +335,23 @@
       });
     </script>
 
-    
+    <script>
+      $(function(){
+        $('#submit').click(function(){
+          var data = $("#form").serialize();
+          var url = '{{URL::to('store')}}';
+          $.ajax({
+                  type : "post",
+                  url : url,
+                  data : data,
+                  success : function(data)
+                  {
+                    alert ("submitted");
+                  }
+          });
+      }); 
+      });
+    </script>
 
 </body>
 

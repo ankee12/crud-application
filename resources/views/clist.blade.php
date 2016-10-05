@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CRUD</title>
+    <title> CRUD </title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
@@ -82,9 +82,7 @@
 
             <div class="col-sm-12 col-lg-12 col-md-12">
               <h2> List of Customer </h2>  
-              
-             
-
+              <p id="message" style="color:red;"> </p>
               <div class="table-responsive">
                 <table class="table" id="example" cellspacing="0" width="100%">
                 <thead>
@@ -101,23 +99,10 @@
                     <th> Action </th>
                   </tr>
                 </thead>
-                <tfoot>
-                 <tr>
-                    <th> <input type="checkbox" id="checkAll"> </th>
-                    <th> Name </th>
-                    <th> Date of Birth </th>
-                    <th> Gender </th>
-                    <th> Country </th>
-                    <th> Address </th>
-                    <th> Email </th>
-                    <th> Food </th>
-                    <th> Photo </th>
-                    <th> Action </th>
-                  </tr>
-                </tfoot>
+            
                 <tbody>
                    @foreach($customers as $customerss) 
-                  <tr>
+                  <tr id="customerss{{$customerss->id}}">
                     <td> <input type="checkbox" name="checkbox[]" data-id="checkbox" class="cb" value="{{$customerss->id}}"/> </td>
                     <td> {{$customerss->name}} </td>
                     <td> {{$customerss->dob}} </td>
@@ -129,7 +114,7 @@
                     <td> <img src="{{URL::to('/image',$customerss->image)}}" width="50px" height="40px"> </td>
                     <td>  
                       <a href="{{route('edit', $customerss->id)}}"> <i class="fa fa-pencil" aria-hidden="true"></i> </a>  &nbsp; &nbsp;
-                      <a href="{{route('destroy', $customerss->id)}}" class="delete" id="delete"> <i class="fa fa-trash" aria-hidden="true"></i> </a> 
+                     <!-- <a href="{{route('destroy', $customerss->id)}}" class="delete" id="btn-del"> <i class="fa fa-trash" aria-hidden="true"></i> </a> -->
                     </td>
                     
                   </tr>
@@ -138,7 +123,7 @@
                 <tbody>
                  
                 </table>
-                    <button type="button" id="btn-del"> Delete </button>
+                    <button type="button" id="btn-del" class="btn-del"> Delete </button>
               </div>
 
             </div>
@@ -180,6 +165,7 @@
     {!!Html::script('//code.jquery.com/ui/1.11.2/jquery-ui.js')!!}
     {!!Html::script('//code.jquery.com/jquery-1.12.3.js')!!}
     {!!Html::script('//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')!!}
+    
     <script type="text/javascript">
       $("#checkAll").change(function () {
         $("input:checkbox").prop('checked', $(this).prop("checked"));
@@ -187,24 +173,43 @@
     </script>
 
     <script type="text/javascript">
-    $('#btn-del').click(function(){
+        $('#btn-del').click(function(){
+           //  $('#btn-del').on('click', function(){
         //var uid = [];
-        $(':checkbox:checked').each(function(){
-            var id = $(this).val();
-            //alert(uid);
+
+          $(':checkbox:checked').each(function(){
+           // $('tbody').delegate('.btn-del','click',function(){
+            var id = $(this).val(); 
+            var url = '{{URL::to('destroy')}}'; 
+            
             //return;
-            $.get("{{action('CustomerCtrl@destroy', 'id')}}", function(){
-                 alert("deleted");
-            });
+            //$.get("{{route('destroy', 'id')}}", function(data){
+              // console.log(data);
+            //});
+            if(confirm('Are you sure to delete?')==true){
+             $.ajax({
+               type    : "get",
+               url    : url,
+               data   : {'id':id},
+              // async   : false,
+               success: function(data)
+               {
+                $("#message").html(data.sms);
+                //alert(data.sms);
+                $('#customerss'+id).remove();
+               } 
+      });
+      } 
         });
-    });
+      });
     </script>
+
     <script>
     $(document).ready(function() {
     $('#example').DataTable();
-    } );
+    });
     </script>
-</body>
 
+</body>
 </html>
  
